@@ -36,7 +36,7 @@ func (v *validation) SendMail(toEmail string, userId string) error {
 	number := strconv.Itoa(rand.Intn(9999))
 
 	emailSender := gomail.NewMessage()
-	body := "<html><body><h1>Olá seja bem vindo ao busca tesouro direto!</h1><br/> Seu código de autenticação é: " + number + "<br/> <a href='' alt='tela'>clique aqui</a></body></html>"
+	body := "<html><body><h1>Olá seja bem vindo ao busca tesouro direto!</h1><br/> Seu código de autenticação é: " + number + "<br/> <a href='https://proj-busca-tesouro.vercel.app/cadastroUser/validateEmail.html' alt='tela'>clique aqui</a></body></html>"
 
 	emailSender.SetHeader("From", "contato@buscatesouro.com.br")
 	emailSender.SetHeader("To", toEmail)
