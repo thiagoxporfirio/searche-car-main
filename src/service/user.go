@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"strconv"
 	"sync"
 
 	"github.com/Eli15x/search-car/src/client"
@@ -20,6 +21,7 @@ type CommandUser interface {
 	ValidateUser(ctx context.Context, username string, password string) (map[string]interface{}, error)
 	EditPermissionUser(ctx context.Context, userId string, permission string) error
 	GetInformation(ctx context.Context, userId string) (*models.User, error)
+	GetCarsUserCanCreate(ctx context.Context, userId string) (string, error)
 }
 
 type user struct{}
@@ -165,4 +167,32 @@ func (u *user) GetInformation(ctx context.Context, userId string) (*models.User,
 	}
 
 	return result, nil
+}
+
+func (u *user) GetCarsUserCanCreate(ctx context.Context, userId string) (string, error) {
+
+	permission, err := client.GetInstance().SelectOneParameter(`SELECT permission FROM userInfo WHERE userId = ?`, userId)
+
+	if permission == "" {
+		return "", errors.New("Get Cars User Can Create: user not exists")
+	}
+
+	if err != nil {
+		return "", errors.New("Get Cars User Can Create: error validate info in sql")
+	}
+
+	result, err := GetInstanceCar().GetCountCarsOfUserId(ctx, userId)
+	if err != nil {
+		return "", errors.New("Get Cars User Can Create: error validate info in sql")
+	}
+
+	if result == -1 {
+		return "-2", nil
+	}
+
+	if permission == "3" {
+		return "-1", nil
+	}
+
+	return strconv.Itoa(result), nil
 }

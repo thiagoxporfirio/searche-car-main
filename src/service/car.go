@@ -18,6 +18,8 @@ type CommandCar interface {
 	CreateNewCar(ctx context.Context, placa string, state string, userId string, modeloDoCarro string, municipio string, nome string, cor string, anoDoCarro string, renavam string, chassi string) error
 	GetInformationUser(ctx context.Context, placa string) (string, error)
 	GetInformationCarByState(ctx context.Context, state string) ([]map[string]interface{}, error)
+	GetCountCarsOfUserId(ctx context.Context, userId string) (int, error)
+	GetCarsByUserId(ctx context.Context, userId string) ([]map[string]interface{}, error)
 }
 
 type car struct{}
@@ -121,6 +123,30 @@ func (c *car) GetInformationCarByState(ctx context.Context, state string) ([]map
 	if result == nil {
 		return nil, errors.New("Get Information: user not exists")
 	}
+
+	if err != nil {
+		return nil, errors.New("Get Information: error validate info in sql")
+	}
+
+	return result, nil
+
+}
+
+func (c *car) GetCountCarsOfUserId(ctx context.Context, userId string) (int, error) {
+
+	result, err := client.GetInstance().SelectCountCar(`SELECT * FROM car WHERE userId = ?`, userId)
+
+	if err != nil {
+		return -1, errors.New("Get Information: error validate info in sql")
+	}
+
+	return result, nil
+
+}
+
+func (c *car) GetCarsByUserId(ctx context.Context, userId string) ([]map[string]interface{}, error) {
+
+	result, err := client.GetInstance().SelectCarInformation(`SELECT * FROM car WHERE userId = ?`, userId)
 
 	if err != nil {
 		return nil, errors.New("Get Information: error validate info in sql")

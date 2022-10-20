@@ -139,3 +139,31 @@ func GetCarsByState(c *gin.Context) {
 
 	c.JSON(http.StatusOK, result)
 }
+
+func GetCarsByUserId(c *gin.Context) {
+
+	json_map := make(map[string]interface{})
+	err := json.NewDecoder(c.Request.Body).Decode(&json_map)
+
+	if err != nil {
+		c.String(400, "%s", err)
+		return
+	}
+
+	userId := json_map["userId"].(string)
+
+	if userId == "" {
+		c.String(400, "Get cars by UserId: userId not exist")
+		return
+	}
+
+	result, err := service.GetInstanceCar().GetCarsByUserId(context.Background(), userId)
+	if err != nil {
+		c.String(400, err.Error())
+		return
+	}
+
+	log.Infof("[GetInformation] Object : %s \n", result, "")
+
+	c.JSON(http.StatusOK, result)
+}

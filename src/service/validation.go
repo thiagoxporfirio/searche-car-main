@@ -20,6 +20,7 @@ var (
 type CommandValidation interface {
 	ValidateNumber(userId string, number string) error
 	SendMail(toEmail string, userId string) error
+	SendEmailInformation(nome string, email string, localizacao string, placa string, marca string, municipio string, estado string, foto1 string, foto2 string, foto3 string) error
 }
 
 type validation struct{}
@@ -36,7 +37,7 @@ func (v *validation) SendMail(toEmail string, userId string) error {
 	number := strconv.Itoa(rand.Intn(9999))
 
 	emailSender := gomail.NewMessage()
-	body := "<html><body><h1>Olá seja bem vindo ao busca tesouro direto!</h1><br/> Seu código de autenticação é: " + number + "<br/> <a href='https://proj-busca-tesouro.vercel.app/cadastroUser/validateEmail.html' alt='tela'>clique aqui</a></body></html>"
+	body := "<html><body><h1>Olá seja bem vindo ao busca tesouro direto!</h1><br/> Seu código de autenticação é: " + number + "<br/> <a href='' alt='tela'>clique aqui</a></body></html>"
 
 	emailSender.SetHeader("From", "contato@buscatesouro.com.br")
 	emailSender.SetHeader("To", toEmail)
@@ -102,6 +103,38 @@ func (v *validation) ValidateNumber(userId string, number string) error {
 	err = client.GetInstance().DeleteParameter(`DELETE FROM validation WHERE userId = ?`, userId)
 	if err != nil {
 		return errors.New("Validate User: error get data")
+	}
+
+	return nil
+}
+
+func (v *validation) SendEmailInformation(nome string, email string, localizacao string, placa string, marca string, municipio string, estado string, foto1 string, foto2 string, foto3 string) error {
+
+	emailSender := gomail.NewMessage()
+	body := "<html><body><h3>Olá acompanhe as informações vindas de <b>" + nome + "</b> email: <b>" + email + "</b> : </h3><br/> veículo localizado em:  " + localizacao + "<br/>  descrição de veículo:  placa: " + placa + "<br/> Marca: " + marca + "<br/> Municipio: " + municipio + "<br/> estado: " + estado + "<br/>"
+
+	if foto1 != "" {
+		body += "<img src='" + foto1 + "' /> </br>"
+	}
+
+	if foto2 != "" {
+		body += "<img src='" + foto2 + "' /> </br>"
+	}
+
+	if foto3 != "" {
+		body += "<img src='" + foto3 + "' /> </br>"
+	}
+	body += "</body> </html>"
+
+	emailSender.SetHeader("From", "contato@buscatesouro.com.br")
+	emailSender.SetHeader("To", "contato@buscatesouro.com.br")
+	emailSender.SetHeader("Subject", "Um novo carro informado")
+	emailSender.SetBody("text/html", body)
+
+	send := gomail.NewDialer("smtps.uhserver.com", 465, "contato@buscatesouro.com.br", "Busc@tesouro2022")
+
+	if err := send.DialAndSend(emailSender); err != nil {
+		return err
 	}
 
 	return nil

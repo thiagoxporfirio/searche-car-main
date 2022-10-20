@@ -31,6 +31,7 @@ type CommandClient interface {
 	UpdateCars(sqlStatement string, user *models.User) error
 	UpdateValidation(sqlStatement string, validation *models.Validacao) error
 	InsertValidation(sqlStatement string, validation *models.Validacao) error
+	SelectCountCar(commandSql string, interfaceSql interface{}) (int, error)
 }
 
 type clientSql struct {
@@ -266,6 +267,22 @@ func (c *clientSql) SelectCarInformation(commandSql string, interfaceSql interfa
 
 	//ver se o retorno do data é realmente oque desejo no caso do select.
 	return carModel, nil
+}
+
+func (c *clientSql) SelectCountCar(commandSql string, interfaceSql interface{}) (int, error) {
+
+	var countCar = 0
+
+	rows, err := c.db.Query(commandSql, interfaceSql)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		countCar++
+	}
+
+	return countCar, nil
 }
 
 func (c *clientSql) InsertUser(sqlStatement string, user *models.User) error {
