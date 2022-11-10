@@ -8,12 +8,12 @@
 to start use this project in local enviroment download the project and using terminal do the follow command in the paste of project:
 ```sh
 `go run main.go`
-project wil be available at: http://localhost:1323
+project wil be available at: http://http://localhost:1323
 ```
 
 ### validate user
     using local:
-    POST: http://localhost:1323/login
+    POST: http://http://localhost:1323/login
     format data: 
 
    ```sh
@@ -26,7 +26,7 @@ project wil be available at: http://localhost:1323
 
 ### register
     using local:
-    POST: http://localhost:1323/cadastro
+    POST: http://http://localhost:1323/cadastro
     format data: 
 
    ```sh
@@ -42,7 +42,7 @@ project wil be available at: http://localhost:1323
 
 ### change permission
     using local:
-    POST: http://localhost:1323/user/change-permission
+    POST: http://http://localhost:1323/user/change-permission
     format data: 
 
    ```sh
@@ -55,7 +55,7 @@ project wil be available at: http://localhost:1323
 
 ### get user info
     using local:
-    POST: http://localhost:1323/user/getInformation
+    POST: http://http://localhost:1323/user/getInformation
     format data: 
 
    ```sh
@@ -67,7 +67,7 @@ project wil be available at: http://localhost:1323
 
 ### change permission user
     using local:
-    POST: http://localhost:1323/user/change-permission
+    POST: http://http://localhost:1323/user/change-permission
     format data: 
 
    ```sh
@@ -82,7 +82,7 @@ project wil be available at: http://localhost:1323
 
 ### create car
     using local:
-    POST: http://localhost:1323/car/create
+    POST: http://http://localhost:1323/car/create
     format data: 
 
    ```sh
@@ -103,18 +103,18 @@ project wil be available at: http://localhost:1323
 
 ### Get car by state
     using local:
-    POST: http://localhost:1323/car/state/:state
+    POST: http://http://localhost:1323/car/state/:state
 
     where is state put the state like:
-    http://localhost:1323/car/state/SP
+    http://http://localhost:1323/car/state/SP
 
     the rote will return the cars that are in SP 
 
 ### Get car by state
     using local:
-    POST: http://localhost:1323/car/placa/:placa
+    POST: http://http://localhost:1323/car/placa/:placa
 
     where is placa put the placa like:
-    http://localhost:1323/car/placa/3010lia
+    http://http://localhost:1323/car/placa/3010lia
 
     the rote will return the user that register the placa

@@ -66,6 +66,8 @@ func SendEmailCar(c *gin.Context) {
 	foto1 := json_map["foto1"].(string)
 	foto2 := json_map["foto2"].(string)
 	foto3 := json_map["foto3"].(string)
+	foto4 := json_map["foto4"].(string)
+
 
 	if nome == "" {
 		c.String(http.StatusBadRequest, "Send Email Car Error: nome not find")
@@ -102,7 +104,7 @@ func SendEmailCar(c *gin.Context) {
 		return
 	}
 
-	err = service.GetInstanceValidation().SendEmailInformation(nome, email, localizacao, placa, marca, municipio, estado, foto1, foto2, foto3)
+	err = service.GetInstanceValidation().SendEmailInformation(nome, email, localizacao, placa, marca, municipio, estado, foto1, foto2, foto3, foto4)
 	if err != nil {
 		c.String(400, err.Error())
 		return

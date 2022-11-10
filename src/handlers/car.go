@@ -112,6 +112,32 @@ func GetUserBycar(c *gin.Context) {
 	c.String(http.StatusOK, result)
 }
 
+func GetCar(c *gin.Context) {
+
+	json_map := make(map[string]interface{})
+	err := json.NewDecoder(c.Request.Body).Decode(&json_map)
+
+	if err != nil {
+		c.String(400, "%s", err)
+		return
+	}
+
+	placa := json_map["placa"].(string)
+
+	if placa == "" {
+		c.String(400, "Get Car Error: placa not find")
+		return
+	}
+
+	result, err := service.GetInstanceCar().GetCar(context.Background(), placa)
+	if err != nil {
+		c.String(403, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 func GetCarsByState(c *gin.Context) {
 
 	json_map := make(map[string]interface{})

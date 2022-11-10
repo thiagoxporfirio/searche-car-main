@@ -20,7 +20,7 @@ var (
 type CommandValidation interface {
 	ValidateNumber(userId string, number string) error
 	SendMail(toEmail string, userId string) error
-	SendEmailInformation(nome string, email string, localizacao string, placa string, marca string, municipio string, estado string, foto1 string, foto2 string, foto3 string) error
+	SendEmailInformation(nome string, email string, localizacao string, placa string, marca string, municipio string, estado string, foto1 string, foto2 string, foto3 string, foto4 string) error
 }
 
 type validation struct{}
@@ -108,7 +108,7 @@ func (v *validation) ValidateNumber(userId string, number string) error {
 	return nil
 }
 
-func (v *validation) SendEmailInformation(nome string, email string, localizacao string, placa string, marca string, municipio string, estado string, foto1 string, foto2 string, foto3 string) error {
+func (v *validation) SendEmailInformation(nome string, email string, localizacao string, placa string, marca string, municipio string, estado string, foto1 string, foto2 string, foto3 string, foto4 string) error {
 
 	emailSender := gomail.NewMessage()
 	body := "<html><body><h3>Olá acompanhe as informações vindas de <b>" + nome + "</b> email: <b>" + email + "</b> : </h3><br/> veículo localizado em:  " + localizacao + "<br/>  descrição de veículo:  placa: " + placa + "<br/> Marca: " + marca + "<br/> Municipio: " + municipio + "<br/> estado: " + estado + "<br/>"
@@ -124,6 +124,11 @@ func (v *validation) SendEmailInformation(nome string, email string, localizacao
 	if foto3 != "" {
 		body += "<img src='" + foto3 + "' /> </br>"
 	}
+
+	if foto4 != "" {
+		body += "<img src='" + foto4 + "' /> </br>"
+	}
+
 	body += "</body> </html>"
 
 	emailSender.SetHeader("From", "contato@buscatesouro.com.br")

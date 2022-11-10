@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"sync"
+	"fmt"
 
 	"github.com/Eli15x/search-car/src/client"
 	"github.com/Eli15x/search-car/src/models"
@@ -20,6 +21,7 @@ type CommandCar interface {
 	GetInformationCarByState(ctx context.Context, state string) ([]map[string]interface{}, error)
 	GetCountCarsOfUserId(ctx context.Context, userId string) (int, error)
 	GetCarsByUserId(ctx context.Context, userId string) ([]map[string]interface{}, error)
+	GetCar(ctx context.Context, placa string) (map[string]interface{}, error)
 }
 
 type car struct{}
@@ -115,6 +117,24 @@ func (c *car) GetInformationUser(ctx context.Context, placa string) (string, err
 	return result, nil
 
 }
+
+func (c *car) GetCar(ctx context.Context, placa string) (map[string]interface{}, error) {
+
+	result, err := client.GetInstance().SelectOneCarInformation(`SELECT * FROM car WHERE placa = ?`, placa)
+	//fazer outra consulta.
+	fmt.Println(result)
+	if result == nil {
+		return nil, errors.New("Get Car: car not exists")
+	}
+
+	if err != nil {
+		return nil, errors.New("Get Car: error validate info in sql")
+	}
+
+	return result, nil
+
+}
+
 
 func (c *car) GetInformationCarByState(ctx context.Context, state string) ([]map[string]interface{}, error) {
 

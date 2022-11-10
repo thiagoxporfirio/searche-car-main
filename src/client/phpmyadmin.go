@@ -29,6 +29,7 @@ type CommandClient interface {
 	SelectCarAllInformation(commandSql string, interfaceSql interface{}) ([]*models.Car, error)
 	SelectCarInformation(commandSql string, interfaceSql interface{}) ([]map[string]interface{}, error)
 	UpdateCars(sqlStatement string, user *models.User) error
+	SelectOneCarInformation(commandSql string, interfaceSql interface{}) (map[string]interface{}, error)
 	UpdateValidation(sqlStatement string, validation *models.Validacao) error
 	InsertValidation(sqlStatement string, validation *models.Validacao) error
 	SelectCountCar(commandSql string, interfaceSql interface{}) (int, error)
@@ -107,11 +108,12 @@ func (c *clientSql) SelectUserInformation(commandSql string, interfaceSql interf
 	var userId string
 	var name string
 	var permission string
+	var email string
 
 	var userModel map[string]interface{}
 
 	row := c.db.QueryRow(commandSql, interfaceSql)
-	err := row.Scan(&name, &permission, &userId)
+	err := row.Scan(&name, &permission, &userId, &email)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -126,6 +128,7 @@ func (c *clientSql) SelectUserInformation(commandSql string, interfaceSql interf
 		"UserId":     userId,
 		"Name":       name,
 		"Permission": permission,
+		"Email":	  email,
 	}
 
 	//ver se o retorno do data é realmente oque desejo no caso do select.
@@ -218,6 +221,46 @@ func (c *clientSql) SelectCarAllInformation(commandSql string, interfaceSql inte
 
 	//ver se o retorno do data é realmente oque desejo no caso do select.
 	return carModel, nil
+}
+
+func (c *clientSql) SelectOneCarInformation(commandSql string, interfaceSql interface{}) (map[string]interface{}, error) {
+
+	var Placa string
+	var Cor string
+	var Nome string
+	var UserId string
+	var Municipio string
+	var State string
+	var MarcaEModelo string
+	var Chassi string
+	var Renavam string
+	var AnoDoCarro string
+
+	row := c.db.QueryRow(commandSql, interfaceSql)
+	err := row.Scan(&Placa, &UserId, &Renavam, &State, &MarcaEModelo, &Municipio, &AnoDoCarro, &Cor, &Chassi, &Nome)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("Zero rows found")
+			return nil, nil
+		} else {
+			return nil, err
+		}
+	}
+
+	var newCar = map[string]interface{}{
+		"UserId":       UserId,
+		"Nome":         Nome,
+		"Cor":          Cor,
+		"Municipio":    Municipio,
+		"State":        State,
+		"MarcaEModelo": MarcaEModelo,
+		"AnoDoCarro":   AnoDoCarro,
+		"Placa":        Placa,
+	}
+
+	
+	return newCar, nil
 }
 
 func (c *clientSql) SelectCarInformation(commandSql string, interfaceSql interface{}) ([]map[string]interface{}, error) {

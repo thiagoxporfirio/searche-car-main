@@ -39,6 +39,7 @@ func main() {
 	router.POST("/car/state", handlers.GetCarsByState)
 	router.POST("/car/carsCanCreate", handlers.GetCarsUserCanCreate)
 	router.POST("/car/cars", handlers.GetCarsByUserId)
+	router.POST("/car", handlers.GetCar)
 	router.POST("/validation", handlers.ValidateNumber)
 	router.POST("/sendInformation", handlers.SendEmailCar)
 

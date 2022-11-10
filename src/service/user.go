@@ -79,7 +79,7 @@ func (u *user) ValidateUser(ctx context.Context, email string, password string) 
 		return nil, errors.New("Validate User: error validate info in sql")
 	}
 
-	resultUser, err := client.GetInstance().SelectUserInformation(`SELECT name,permission,userId  FROM userInfo WHERE userId = ?`, result)
+	resultUser, err := client.GetInstance().SelectUserInformation(`SELECT name,permission,userId,email  FROM userInfo WHERE userId = ?`, result)
 
 	newResult, err := client.GetInstance().SelectOneParameter(`SELECT number FROM validation WHERE userId = ?`,
 		result)
